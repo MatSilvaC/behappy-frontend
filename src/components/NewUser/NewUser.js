@@ -3,15 +3,14 @@ import React, { Component } from "react";
 import Label from "../Label";
 import Input from "../Input";
 import GenderSelector from "../GenderSelector";
+import Button from "../Button";
+import User from "../../models/User";
 
 class NewUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {
-        name: "",
-        gender: ""
-      },
+      user: new User(),
       validation: {
         invalidName: false,
         invalidGender: false
@@ -33,6 +32,19 @@ class NewUser extends Component {
     user.gender = gender;
     this.setState({
       user: user
+    });
+  };
+
+  valid = e => {
+    e.preventDefault();
+    let user = this.state.user;
+    let validation = this.state.validation;
+
+    validation.invalidName = !user.validName();
+    validation.invalidGender = !user.validGender();
+
+    this.setState({
+      validation: validation
     });
   };
 
@@ -63,6 +75,7 @@ class NewUser extends Component {
             gender={this.state.user.gender}
             updateGender={this.updateUserGender}
           />
+          <Button main text="Próximo" onClick={this.valid} />
         </form>
       </div>
     );
